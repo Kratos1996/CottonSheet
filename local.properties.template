@@ -1,0 +1,8 @@
+# Maven Central / Sonatype credentials
+mavenCentralUsername=YOUR_SONATYPE_TOKEN_USERNAME
+mavenCentralPassword=YOUR_SONATYPE_TOKEN_PASSWORD
+
+# GPG signing
+signing.keyId=YOUR_KEY_ID_LAST_8_CHARS
+signing.password=YOUR_GPG_PASSPHRASE
+signing.secretKeyRingFile=/path/to/your/secring.gpg
