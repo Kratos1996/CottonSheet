@@ -1,28 +1,41 @@
-import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.vanniktechPublish)
+    alias(libs.plugins.dokka)
+    id("signing")
 }
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
+    android {
+        namespace = "dev.ishant.bottomsheet"
+        compileSdk = 37
+        minSdk = 24
+
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    val isMac = org.gradle.internal.os.OperatingSystem.current().isMacOsX
+    if (isMac) {
+        iosX64()
+        iosArm64()
+        iosSimulatorArm64()
+    }
+
     jvm("desktop")
+
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-    wasmJs { browser() }
-    js(IR) { browser() }
+    wasmJs {
+        browser()
+    }
+
+    js {
+        browser()
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -35,41 +48,55 @@ kotlin {
     }
 }
 
-android {
-    namespace = "dev.ishant.bottomsheet"
-    compileSdk = 35
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
+    val signingKeyId = project.findProperty("signing.keyId")?.toString()
+    val signingPassword = project.findProperty("signing.password")?.toString()
+    val signingSecretKey = project.findProperty("signing.secretKey")?.toString()
+
+    if (!signingKeyId.isNullOrBlank() && 
+        !signingKeyId.contains("YOUR_KEY_ID") && 
+        !signingPassword.isNullOrBlank() && 
+        !signingSecretKey.isNullOrBlank()) {
+        useInMemoryPgpKeys(signingKeyId, signingSecretKey, signingPassword)
     }
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-
     coordinates(
-        groupId = "dev.ishant",
+        groupId = "io.github.kratos1996",
         artifactId = "compose-multiplatform-bottomsheet",
         version = "1.0.1"
     )
 
+    publishToMavenCentral()
+
+    val isRelease = project.hasProperty("release") || project.hasProperty("publish")
+    val signingKeyId = project.findProperty("signing.keyId")?.toString()
+    val signingPassword = project.findProperty("signing.password")?.toString()
+    val signingSecretKey = project.findProperty("signing.secretKey")?.toString()
+    val signingSecretKeyRingFile = project.findProperty("signing.secretKeyRingFile")?.toString()
+
+    val hasSigningKey = !signingKeyId.isNullOrBlank() &&
+            !signingKeyId.contains("YOUR_KEY_ID") &&
+            !signingPassword.isNullOrBlank() &&
+            (!signingSecretKey.isNullOrBlank() || !signingSecretKeyRingFile.isNullOrBlank())
+
+    if (hasSigningKey && (isRelease || project.hasProperty("signing.keyId"))) {
+        signAllPublications()
+    }
+
     pom {
-        name.set("CMP-Bottomsheet")
-        description.set(
-            "A zero-boilerplate, fully parameterized ModalBottomSheet for " +
-            "Compose Multiplatform (Android, iOS, Desktop, Web)."
-        )
+        name.set("Compose Multiplatform BottomSheet")
+        description.set("A zero-boilerplate, fully parameterized ModalBottomSheet for Compose Multiplatform.")
         url.set("https://github.com/Kratos1996/CMP-Bottomsheet")
+
         licenses {
             license {
-                name.set("Apache-2.0")
+                name.set("Apache License 2.0")
                 url.set("https://www.apache.org/licenses/LICENSE-2.0")
             }
         }
+
         developers {
             developer {
                 id.set("Kratos1996")
@@ -77,10 +104,11 @@ mavenPublishing {
                 email.set("ishant.sharma1947@gmail.com")
             }
         }
+
         scm {
             url.set("https://github.com/Kratos1996/CMP-Bottomsheet")
-            connection.set("scm:git:git://github.com/Kratos1996/CMP-Bottomsheet.git")
-            developerConnection.set("scm:git:ssh://git@github.com/Kratos1996/CMP-Bottomsheet.git")
+            connection.set("scm:git:https://github.com/Kratos1996/CMP-Bottomsheet.git")
+            developerConnection.set("scm:git:ssh://git@github.com:Kratos1996/CMP-Bottomsheet.git")
         }
     }
 }

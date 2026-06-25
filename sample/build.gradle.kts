@@ -31,11 +31,11 @@ kotlin {
 
 android {
     namespace = "dev.ishant.sample"
-    compileSdk = 35
+    compileSdk = 37
     defaultConfig {
         applicationId = "dev.ishant.sample"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
     }

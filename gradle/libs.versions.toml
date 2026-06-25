@@ -1,8 +1,9 @@
 [versions]
-kotlin = "2.1.0"
-agp = "8.7.3"
+kotlin = "2.4.0"
+agp = "9.2.1"
 composeMultiplatform = "1.7.3"
-vanniktechPublish = "0.30.0"
+vanniktechPublish = "0.37.0"
+dokka = "2.2.0"
 androidx-activityCompose = "1.9.3"
 
 [libraries]
@@ -15,7 +16,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 [plugins]
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 vanniktechPublish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPublish" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

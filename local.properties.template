@@ -1,8 +1,16 @@
-# Maven Central / Sonatype credentials
-mavenCentralUsername=YOUR_SONATYPE_TOKEN_USERNAME
-mavenCentralPassword=YOUR_SONATYPE_TOKEN_PASSWORD
+# Maven Central (Sonatype Central Portal)
+# Generate these at https://central.sonatype.com/account -> "Generate User Token"
+# DO NOT use your regular account password.
+mavenCentralUsername=YOUR_TOKEN_USERNAME
+mavenCentralPassword=YOUR_TOKEN_PASSWORD
 
-# GPG signing
+# GPG Signing
+# The modern and recommended way is In-Memory signing.
+# 1. Export your secret key: gpg --export-secret-keys YOUR_KEY_ID | base64 (or use ASCII armored key)
+# 2. Paste the result in signing.secretKey
 signing.keyId=YOUR_KEY_ID_LAST_8_CHARS
 signing.password=YOUR_GPG_PASSPHRASE
-signing.secretKeyRingFile=/path/to/your/secring.gpg
+signing.secretKey=YOUR_BASE64_OR_ASCII_ARMORED_KEY
+
+# Legacy file-based approach (Not recommended for GPG 2.1+)
+# signing.secretKeyRingFile=C:/Users/YourName/.gnupg/secring.gpg
