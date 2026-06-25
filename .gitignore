@@ -1,8 +1,27 @@
+# Gradle
+.gradle/
+build/
+*/build/
+sample/build/
+
+# IntelliJ / Android Studio
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea
+*.iws
+*.ipr
+out/
+
+# Local configuration
+local.properties
+
+# OS specific
 .DS_Store
-/build
-/captures
-/bottomsheet/build
+Thumbs.db
+
+# Kotlin / Compose Multiplatform
+.kotlin/
+.compose/
+.konan/
+
+# Test output
+captures/
