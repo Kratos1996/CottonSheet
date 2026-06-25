@@ -11,6 +11,7 @@ A zero-boilerplate, fully parameterized `ModalBottomSheet` for **Compose Multipl
 
 - **Multiplatform Support**: Android, iOS, Desktop (JVM), and Web (Wasm/JS).
 - **Global Hosting**: Define your `BottomSheetHost` once at the root; trigger sheets from anywhere.
+- **Stacked Sheets**: Open multiple sheets on top of each other with built-in stack management.
 - **Full Customization**: Control shapes, colors, elevations, and drag handles via `BottomSheetParams`.
 - **Type-Safe**: Built with Kotlin and modern Compose Multiplatform practices.
 - **Zero Boilerplate**: No need to manage `rememberModalBottomSheetState` or visibility flags manually.
@@ -24,7 +25,7 @@ Add the dependency to your `commonMain` source set in `build.gradle.kts`:
 ```kotlin
 sourceSets {
     commonMain.dependencies {
-        implementation("dev.ishant:compose-multiplatform-bottomsheet:1.0.0")
+        implementation("io.github.kratos1996:compose-multiplatform-bottomsheet:1.0.1")
     }
 }
 ```
@@ -33,7 +34,11 @@ sourceSets {
 
 ## 🛠️ Setup
 
-Wrap your application's root content with `BottomSheetHost`. This should typically be done in your top-level Composable (e.g., inside your `MaterialTheme`).
+1. **Configure Signing (for publishing)**:
+   If you plan to publish to Maven Central, create a `local.properties` file based on `local.properties.template` and fill in your GPG signing keys and Maven Central credentials.
+
+2. **Initialize BottomSheetHost**:
+   Wrap your application's root content with `BottomSheetHost`. This should typically be done in your top-level Composable (e.g., inside your `MaterialTheme`).
 
 ```kotlin
 @Composable
@@ -117,6 +122,9 @@ controller.show(
 | `tonalElevation` | `Dp` | `1.dp` | Tonal elevation of the sheet. |
 | `scrimColor` | `Color?` | `null` | Color of the background scrim. |
 | `showDragHandle` | `Boolean` | `true` | Whether to show the default Material 3 drag handle. |
+| `isFullScreen` | `Boolean` | `false` | If true, the sheet will fill the entire screen height. |
+| `isDismissable` | `Boolean` | `true` | Whether the sheet can be dismissed by tapping outside or back press. |
+| `dismissRequest` | `(() -> Unit)?` | `null` | Callback triggered when a dismiss is requested (if `isDismissable` is true). |
 | `customDragHandle` | `@Composable () -> Unit` | `null` | A custom Composable to use as the drag handle. |
 
 ---
