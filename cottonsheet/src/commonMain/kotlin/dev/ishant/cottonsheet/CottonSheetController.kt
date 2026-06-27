@@ -1,36 +1,36 @@
-package dev.ishant.bottomsheet
+package dev.ishant.cottonsheet
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateListOf
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Internal model — one entry per sheet layer in the stack
+// Internal model — one entry per CottonSheet layer in the stack
 // ─────────────────────────────────────────────────────────────────────────────
 
-internal data class BottomSheetEntry(
+internal data class CottonSheetEntry(
     val id: Long,
-    val params: BottomSheetParams,
+    val params: CottonSheetParams,
     val content: @Composable (dismiss: () -> Unit) -> Unit,
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BottomSheetController
+// CottonSheetController
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Drives the [BottomSheetHost].
+ * Drives the [CottonSheetHost].
  *
- * Supports a **stack of sheets**: each [show] call pushes a new layer on top.
- * Sheets are dismissed individually via the `dismiss` lambda or all at once
+ * Supports a **stack of CottonSheets**: each [show] call pushes a new layer on top.
+ * CottonSheets are dismissed individually via the `dismiss` lambda or all at once
  * with [dismissAll].
  *
- * Obtain the instance via [LocalBottomSheetController] inside any composable
- * that lives under a [BottomSheetHost].
+ * Obtain the instance via [LocalCottonSheetController] inside any composable
+ * that lives under a [CottonSheetHost].
  *
- * ### Single sheet
+ * ### Single CottonSheet
  * ```kotlin
- * val controller = LocalBottomSheetController.current
+ * val controller = LocalCottonSheetController.current
  *
  * controller.show { dismiss ->
  *     Column(Modifier.fillMaxWidth().padding(24.dp)) {
@@ -40,27 +40,27 @@ internal data class BottomSheetEntry(
  * }
  * ```
  *
- * ### Stacked sheets
+ * ### Stacked CottonSheets
  * ```kotlin
  * controller.show { dismiss1 ->
  *     Column(Modifier.fillMaxWidth().padding(24.dp)) {
- *         Text("Sheet 1")
+ *         Text("CottonSheet 1")
  *
  *         Button(onClick = {
  *             controller.show { dismiss2 ->
  *                 Column(Modifier.fillMaxWidth().padding(24.dp)) {
- *                     Text("Sheet 2")
- *                     // Close only Sheet 2
- *                     Button(onClick = dismiss2) { Text("Close Sheet 2") }
- *                     // Close every open sheet at once
+ *                     Text("CottonSheet 2")
+ *                     // Close only CottonSheet 2
+ *                     Button(onClick = dismiss2) { Text("Close CottonSheet 2") }
+ *                     // Close every open CottonSheet at once
  *                     Button(onClick = { controller.dismissAll() }) {
  *                         Text("Close All")
  *                     }
  *                 }
  *             }
- *         }) { Text("Open Sheet 2") }
+ *         }) { Text("Open CottonSheet 2") }
  *
- *         Button(onClick = dismiss1) { Text("Close Sheet 1") }
+ *         Button(onClick = dismiss1) { Text("Close CottonSheet 1") }
  *     }
  * }
  * ```
@@ -68,7 +68,7 @@ internal data class BottomSheetEntry(
  * ### With custom params
  * ```kotlin
  * controller.show(
- *     params = BottomSheetParams(
+ *     params = CottonSheetParams(
  *         showDragHandle = false,
  *         containerColor = MaterialTheme.colorScheme.primaryContainer,
  *         sheetMaxWidth = 560.dp,
@@ -78,36 +78,36 @@ internal data class BottomSheetEntry(
  * }
  * ```
  */
-class BottomSheetController {
+class CottonSheetController {
 
     // Auto-incrementing id — no UUID / external dependency needed
     private var nextId = 0L
 
     /**
-     * Live stack of sheet entries observed by [BottomSheetHost].
-     * Index 0 = bottom-most sheet, last index = top-most (visible) sheet.
+     * Live stack of CottonSheet entries observed by [CottonSheetHost].
+     * Index 0 = bottom-most CottonSheet, last index = top-most (visible) CottonSheet.
      */
-    internal val stack = mutableStateListOf<BottomSheetEntry>()
+    internal val stack = mutableStateListOf<CottonSheetEntry>()
 
     // ── Public API ────────────────────────────────────────────────────────────
 
     /**
-     * Push a new bottom sheet onto the stack.
+     * Push a new CottonSheet onto the stack.
      *
-     * @param params  Visual / behavioural configuration. See [BottomSheetParams].
+     * @param params  Visual / behavioural configuration. See [CottonSheetParams].
      * @param content Composable content lambda. Receives a [dismiss] function
-     *                that removes **this specific sheet** (with animation).
+     *                that removes **this specific CottonSheet** (with animation).
      */
     fun show(
-        params: BottomSheetParams = BottomSheetParams(),
+        params: CottonSheetParams = CottonSheetParams(),
         content: @Composable (dismiss: () -> Unit) -> Unit,
     ) {
         val id = nextId++
-        stack.add(BottomSheetEntry(id = id, params = params, content = content))
+        stack.add(CottonSheetEntry(id = id, params = params, content = content))
     }
 
     /**
-     * Dismiss the **top-most** sheet (equivalent to the user tapping outside).
+     * Dismiss the **top-most** CottonSheet (equivalent to the user tapping outside).
      * Does nothing when the stack is empty.
      */
     fun dismiss() {
@@ -115,7 +115,7 @@ class BottomSheetController {
     }
 
     /**
-     * Dismiss **all** sheets in the stack simultaneously.
+     * Dismiss **all** CottonSheets in the stack simultaneously.
      */
     fun dismissAll() {
         stack.clear()
@@ -125,7 +125,7 @@ class BottomSheetController {
 
     /**
      * Remove a specific entry by its internal [id].
-     * Called by [BottomSheetHost] after the hide animation completes.
+     * Called by [CottonSheetHost] after the hide animation completes.
      */
     internal fun dismissById(id: Long) {
         stack.removeAll { it.id == id }
@@ -137,12 +137,12 @@ class BottomSheetController {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Provides [BottomSheetController] to the composition tree.
- * Must be consumed inside a [BottomSheetHost].
+ * Provides [CottonSheetController] to the composition tree.
+ * Must be consumed inside a [CottonSheetHost].
  */
-val LocalBottomSheetController = compositionLocalOf<BottomSheetController> {
+val LocalCottonSheetController = compositionLocalOf<CottonSheetController> {
     error(
-        "LocalBottomSheetController not found. " +
-                "Wrap your root composable with BottomSheetHost { … }"
+        "LocalCottonSheetController not found. " +
+                "Wrap your root composable with CottonSheetHost { … }"
     )
 }

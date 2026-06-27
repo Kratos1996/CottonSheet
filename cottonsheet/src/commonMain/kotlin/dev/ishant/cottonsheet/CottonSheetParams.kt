@@ -1,4 +1,4 @@
-package dev.ishant.bottomsheet
+package dev.ishant.cottonsheet
 
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 
 /**
- * Visual / behavioural configuration for a single bottom sheet layer.
+ * Visual / behavioural configuration for a single CottonSheet layer.
  *
  * @param skipPartiallyExpanded  Skip the half-expanded state (default: true).
  * @param sheetMaxWidth          Max sheet width — useful on tablet / desktop.
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
  * @param customDragHandle       Fully replace the drag handle with your own composable.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-data class BottomSheetParams(
+data class CottonSheetParams(
     val skipPartiallyExpanded: Boolean = true,
     val sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     val shape: Shape? = null,

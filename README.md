@@ -1,20 +1,39 @@
-# Compose Multiplatform BottomSheet : CottonSheet
+# CottonSheet 🌿
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.ishant/compose-multiplatform-bottomsheet)](https://search.maven.org/artifact/dev.ishant/compose-multiplatform-bottomsheet)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kratos1996/cottonsheet)](https://search.maven.org/artifact/io.github.kratos1996/cottonsheet)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.7.3-blue)](https://github.com/JetBrains/compose-multiplatform)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 
-A zero-boilerplate, fully parameterized `ModalBottomSheet` for **Compose Multiplatform**. Manage your bottom sheets globally with a simple controller API, without polluting your UI logic with state management.
+**CottonSheet** is a zero-boilerplate, fully parameterized, and **stackable** `ModalBottomSheet` library for **Compose Multiplatform**. It allows you to manage bottom sheets globally via a simple controller API, keeping your UI logic clean and decoupled from state management.
 
-## 🚀 Features
+---
+
+## 🚀 Key Features
 
 - **Multiplatform Support**: Android, iOS, Desktop (JVM), and Web (Wasm/JS).
-- **Global Hosting**: Define your `BottomSheetHost` once at the root; trigger sheets from anywhere.
-- **Stacked Sheets**: Open multiple sheets on top of each other with built-in stack management.
-- **Full Customization**: Control shapes, colors, elevations, and drag handles via `BottomSheetParams`.
-- **Type-Safe**: Built with Kotlin and modern Compose Multiplatform practices.
-- **Zero Boilerplate**: No need to manage `rememberModalBottomSheetState` or visibility flags manually.
+- **Global Hosting**: Define your `CottonSheetHost` once at the root; trigger sheets from anywhere.
+- **Stacked Sheets**: Open multiple sheets on top of each other. The library manages the stack automatically.
+- **Zero Boilerplate**: No need to manually manage `rememberModalBottomSheetState` or visibility flags.
+- **Customizable**: Full control over shapes, colors, elevation, and even custom drag handles.
+- **Type-Safe**: Built with modern Kotlin and Compose Multiplatform best practices.
+
+---
+
+## 🧠 Understanding the Architecture
+
+CottonSheet is built on three core pillars:
+
+### 1. The `CottonSheetController`
+The brain of the library. It maintains a `mutableStateListOf` of `CottonSheetEntry` objects. Every time you call `show()`, a new entry is pushed onto this stack. Each entry has a unique ID and its own set of `CottonSheetParams`.
+
+### 2. The `CottonSheetHost`
+The visual container. It should be placed at the root of your application. It observes the `CottonSheetController`'s stack and renders each entry using the standard Material 3 `ModalBottomSheet`. 
+- **Isolated State**: Each sheet in the stack is wrapped in a `key(entry.id)`, ensuring that each has its own independent animation state and composition lifecycle.
+- **Stacking Logic**: Sheets are rendered in the order they appear in the stack, creating a natural overlay effect.
+
+### 3. `CottonSheetParams`
+A comprehensive configuration object that lets you tweak everything from behavior (like `isDismissable` or `isFullScreen`) to aesthetics (like `containerColor` or `customDragHandle`).
 
 ---
 
@@ -25,7 +44,7 @@ Add the dependency to your `commonMain` source set in `build.gradle.kts`:
 ```kotlin
 sourceSets {
     commonMain.dependencies {
-        implementation("io.github.kratos1996:compose-multiplatform-bottomsheet:1.0.1")
+        implementation("io.github.kratos1996:cottonsheet:1.0.1")
     }
 }
 ```
@@ -34,18 +53,14 @@ sourceSets {
 
 ## 🛠️ Setup
 
-1. **Configure Signing (for publishing)**:
-   If you plan to publish to Maven Central, create a `local.properties` file based on `local.properties.template` and fill in your GPG signing keys and Maven Central credentials.
-
-2. **Initialize BottomSheetHost**:
-   Wrap your application's root content with `BottomSheetHost`. This should typically be done in your top-level Composable (e.g., inside your `MaterialTheme`).
+Wrap your application's root content with `CottonSheetHost`. This provides the `LocalCottonSheetController` to all children.
 
 ```kotlin
 @Composable
 fun App() {
     MaterialTheme {
-        BottomSheetHost {
-            // Your app content goes here
+        CottonSheetHost {
+            // Your app content, e.g., Navigation Graph
             MainScreen()
         }
     }
@@ -56,76 +71,64 @@ fun App() {
 
 ## 💡 Usage
 
-Access the `LocalBottomSheetController` to show or dismiss sheets. The content lambda provides a `ColumnScope` and a `dismiss` callback.
+Access the controller via `LocalCottonSheetController.current`.
 
-### 1. Basic Bottom Sheet
+### Basic Sheet
 ```kotlin
-val controller = LocalBottomSheetController.current
+val cottonSheet = LocalCottonSheetController.current
 
 Button(onClick = {
-    controller.show { dismiss ->
-        Text("Simple Bottom Sheet")
-        Button(onClick = dismiss) { Text("Close") }
+    cottonSheet.show { dismiss ->
+        Text("I am a CottonSheet!")
+        Button(onClick = dismiss) { Text("Close Me") }
     }
 }) {
-    Text("Show Sheet")
+    Text("Open Sheet")
 }
 ```
 
-### 2. Customizing Appearance
-Use `BottomSheetParams` to tweak the behavior and look:
+### Stacked Sheets (The Power of CottonSheet)
+Opening a sheet from within another sheet is seamless. The host handles the overlay automatically.
 
 ```kotlin
-controller.show(
-    params = BottomSheetParams(
-        skipPartiallyExpanded = false,
-        containerColor = Color.LightGray,
-        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-        showDragHandle = true
-    )
-) { dismiss ->
-    Text("Custom Styled Sheet", Modifier.padding(16.dp))
-}
-```
-
-### 3. Custom Drag Handle
-You can replace the default drag handle with any Composable:
-
-```kotlin
-controller.show(
-    params = BottomSheetParams(
-        customDragHandle = {
-            Box(
-                Modifier
-                    .padding(8.dp)
-                    .size(40.dp, 4.dp)
-                    .background(Color.Gray, CircleShape)
-            )
+cottonSheet.show { dismiss1 ->
+    Column {
+        Text("Sheet 1")
+        Button(onClick = {
+            cottonSheet.show { dismiss2 ->
+                Text("Sheet 2 (On top of Sheet 1)")
+                Button(onClick = dismiss2) { Text("Close Sheet 2") }
+                Button(onClick = { cottonSheet.dismissAll() }) { Text("Close Everything") }
+            }
+        }) {
+            Text("Open Another Sheet")
         }
-    )
-) { 
-    Text("Sheet with Custom Handle")
+    }
 }
 ```
 
 ---
 
-## ⚙️ API Reference: `BottomSheetParams`
+## ⚙️ API Reference
+
+### `CottonSheetParams`
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `skipPartiallyExpanded` | `Boolean` | `true` | Whether the sheet skips the partially expanded state. |
-| `sheetMaxWidth` | `Dp` | `640.dp` | Maximum width of the sheet (useful for Tablets/Desktop). |
-| `shape` | `Shape?` | `null` | The shape of the bottom sheet. |
+| `skipPartiallyExpanded` | `Boolean` | `true` | If true, the sheet skips the half-expanded state. |
+| `isFullScreen` | `Boolean` | `false` | If true, the sheet fills the entire screen height. |
+| `isDismissable` | `Boolean` | `true` | Whether tapping outside or back press closes the sheet. |
+| `showDragHandle` | `Boolean` | `true` | Whether to show the default M3 drag handle. |
+| `customDragHandle` | `Composable?` | `null` | A custom Composable to replace the default handle. |
+| `sheetMaxWidth` | `Dp` | `640.dp` | Maximum width (useful for tablets/desktop). |
 | `containerColor` | `Color?` | `null` | Background color of the sheet. |
-| `contentColor` | `Color?` | `null` | Color of the content inside the sheet. |
-| `tonalElevation` | `Dp` | `1.dp` | Tonal elevation of the sheet. |
-| `scrimColor` | `Color?` | `null` | Color of the background scrim. |
-| `showDragHandle` | `Boolean` | `true` | Whether to show the default Material 3 drag handle. |
-| `isFullScreen` | `Boolean` | `false` | If true, the sheet will fill the entire screen height. |
-| `isDismissable` | `Boolean` | `true` | Whether the sheet can be dismissed by tapping outside or back press. |
-| `dismissRequest` | `(() -> Unit)?` | `null` | Callback triggered when a dismiss is requested (if `isDismissable` is true). |
-| `customDragHandle` | `@Composable () -> Unit` | `null` | A custom Composable to use as the drag handle. |
+| `shape` | `Shape?` | `null` | Corner shape of the sheet. |
+
+### `CottonSheetController`
+
+- `show(params, content)`: Pushes a new sheet onto the stack.
+- `dismiss()`: Dismisses the top-most sheet.
+- `dismissAll()`: Clears the entire stack immediately.
 
 ---
 
@@ -139,10 +142,6 @@ controller.show(
 | **Web (Wasm/JS)** | ✅ |
 
 ---
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request or open an issue for bugs and feature requests.
 
 ## 📄 License
 

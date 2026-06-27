@@ -1,4 +1,4 @@
-rootProject.name = "CMP-Bottomsheet"
+rootProject.name = "CottonSheet"
 
 pluginManagement {
     repositories {
@@ -18,5 +18,5 @@ dependencyResolutionManagement {
     }
 }
 
-include(":bottomsheet")
+include(":cottonsheet")
 include(":sample")

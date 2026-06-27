@@ -10,9 +10,16 @@ plugins {
 
 kotlin {
     android {
-        namespace = "dev.ishant.bottomsheet"
+        namespace = "dev.ishant.cottonsheet"
         compileSdk = 37
         minSdk = 24
+
+        optimization {
+            consumerKeepRules.apply {
+                publish = true
+                file("consumer-rules.pro")
+            }
+        }
 
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -64,7 +71,7 @@ extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
 mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
-        artifactId = "compose-multiplatform-bottomsheet",
+        artifactId = "cottonsheet",
         version = "1.0.1"
     )
 
@@ -86,9 +93,9 @@ mavenPublishing {
     }
 
     pom {
-        name.set("Compose Multiplatform BottomSheet")
+        name.set("CottonSheet")
         description.set("A zero-boilerplate, fully parameterized ModalBottomSheet for Compose Multiplatform.")
-        url.set("https://github.com/Kratos1996/CMP-Bottomsheet")
+        url.set("https://github.com/Kratos1996/CottonSheet")
 
         licenses {
             license {
@@ -106,9 +113,9 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/Kratos1996/CMP-Bottomsheet")
-            connection.set("scm:git:https://github.com/Kratos1996/CMP-Bottomsheet.git")
-            developerConnection.set("scm:git:ssh://git@github.com:Kratos1996/CMP-Bottomsheet.git")
+            url.set("https://github.com/Kratos1996/CottonSheet")
+            connection.set("scm:git:https://github.com/Kratos1996/CottonSheet.git")
+            developerConnection.set("scm:git:ssh://git@github.com:Kratos1996/CottonSheet.git")
         }
     }
 }

@@ -1,4 +1,4 @@
-package dev.ishant.bottomsheet
+package dev.ishant.cottonsheet
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
-import kotlin.invoke
 
 /**
  * Root host composable. Place this **once** at the very top of your composition,
@@ -27,7 +26,7 @@ import kotlin.invoke
  * @Composable
  * fun App() {
  *     MaterialTheme {
- *         BottomSheetHost {
+ *         CottonSheetHost {
  *             MyNavGraph()
  *         }
  *     }
@@ -38,7 +37,7 @@ import kotlin.invoke
  * ```kotlin
  * @Composable
  * fun SomeDeepScreen() {
- *     val controller = LocalBottomSheetController.current
+ *     val controller = LocalCottonSheetController.current
  *
  *     // ── Single sheet ──────────────────────────────────────────────────────
  *     Button(onClick = {
@@ -76,7 +75,7 @@ import kotlin.invoke
  *     // ── Custom params ─────────────────────────────────────────────────────
  *     Button(onClick = {
  *         controller.show(
- *             params = BottomSheetParams(
+ *             params = CottonSheetParams(
  *                 showDragHandle = false,
  *                 containerColor = MaterialTheme.colorScheme.primaryContainer,
  *                 sheetMaxWidth = 560.dp,
@@ -91,11 +90,11 @@ import kotlin.invoke
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetHost(content: @Composable () -> Unit) {
+fun CottonSheetHost(content: @Composable () -> Unit) {
 
-    val controller = remember { BottomSheetController() }
+    val controller = remember { CottonSheetController() }
 
-    CompositionLocalProvider(LocalBottomSheetController provides controller) {
+    CompositionLocalProvider(LocalCottonSheetController provides controller) {
 
         // ── App content ───────────────────────────────────────────────────────
         content()

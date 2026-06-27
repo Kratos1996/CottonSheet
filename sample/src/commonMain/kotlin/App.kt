@@ -12,35 +12,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.ishant.bottomsheet.BottomSheetHost
-import dev.ishant.bottomsheet.BottomSheetParams
-import dev.ishant.bottomsheet.LocalBottomSheetController
+import dev.ishant.cottonsheet.CottonSheetHost
+import dev.ishant.cottonsheet.CottonSheetParams
+import dev.ishant.cottonsheet.LocalCottonSheetController
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun App() {
     MaterialTheme {
-        BottomSheetHost {
+        CottonSheetHost {
             //navigation graph
-            val bottomsheet = LocalBottomSheetController.current
+            val cottonSheet = LocalCottonSheetController.current
             
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
              ) {
                 Button(onClick = {
-                    bottomsheet.show(params = BottomSheetParams(isDismissable = false, isFullScreen = true)) { dismiss ->
+                    cottonSheet.show(params = CottonSheetParams(isDismissable = false, isFullScreen = true)) { dismiss ->
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
                             Text(
-                                text = "Bottom Sheet Content",
+                                text = "CottonSheet Content",
                                 style = MaterialTheme.typography.headlineSmall
                             )
                             Text(
-                                text = "This is a sample bottom sheet using the library.",
+                                text = "This is a sample CottonSheet using the library.",
                                 modifier = Modifier.padding(vertical = 16.dp)
                             )
                             Button(
@@ -48,13 +48,13 @@ fun App() {
                                 modifier = Modifier.align(Alignment.End)
                             ) {
                                 Text("Close", modifier = Modifier.clickable(){
-                                    bottomsheet.show { dismiss2->
+                                    cottonSheet.show { dismiss2->
                                         //compose ui
                                         Button(onClick = {
-                                            bottomsheet.dismissAll()
+                                            cottonSheet.dismissAll()
                                         }){
                                             Text(
-                                                text = "Bottom Sheet2",
+                                                text = "CottonSheet 2",
                                                 style = MaterialTheme.typography.headlineSmall
                                             )
                                         }
@@ -65,7 +65,7 @@ fun App() {
                         }
                     }
                 }) {
-                    Text("Show Bottom Sheet")
+                    Text("Show CottonSheet")
                 }
             }
         }
