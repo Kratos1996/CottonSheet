@@ -1,4 +1,4 @@
-# Compose Multiplatform BottomSheet
+# Compose Multiplatform BottomSheet : CottonSheet
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.ishant/compose-multiplatform-bottomsheet)](https://search.maven.org/artifact/dev.ishant/compose-multiplatform-bottomsheet)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
