@@ -26,21 +26,14 @@ kotlin {
         }
     }
 
-    val isMac = org.gradle.internal.os.OperatingSystem.current().isMacOsX
-    if (isMac) {
-        iosX64()
-        iosArm64()
-        iosSimulatorArm64()
-    }
-
-    jvm("desktop")
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    jvm()
+    js { browser() }
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
-    }
-
-    js {
         browser()
     }
 
@@ -65,6 +58,11 @@ extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
         !signingPassword.isNullOrBlank() && 
         !signingSecretKey.isNullOrBlank()) {
         useInMemoryPgpKeys(signingKeyId, signingSecretKey, signingPassword)
+    } else if (project.hasProperty("signingInMemoryKey") && project.hasProperty("signingInMemoryKeyPassword")) {
+        useInMemoryPgpKeys(
+            project.property("signingInMemoryKey").toString(),
+            project.property("signingInMemoryKeyPassword").toString()
+        )
     }
 }
 
@@ -72,7 +70,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.1"
+        version = "1.0.2"
     )
 
     publishToMavenCentral()
@@ -83,12 +81,13 @@ mavenPublishing {
     val signingSecretKey = project.findProperty("signing.secretKey")?.toString()
     val signingSecretKeyRingFile = project.findProperty("signing.secretKeyRingFile")?.toString()
 
-    val hasSigningKey = !signingKeyId.isNullOrBlank() &&
-            !signingKeyId.contains("YOUR_KEY_ID") &&
-            !signingPassword.isNullOrBlank() &&
-            (!signingSecretKey.isNullOrBlank() || !signingSecretKeyRingFile.isNullOrBlank())
+    val hasSigningKey = (!signingKeyId.isNullOrBlank() && !signingKeyId.contains("YOUR_KEY_ID")) ||
+            project.hasProperty("signingInMemoryKey") ||
+            project.hasProperty("signing.secretKey") ||
+            project.hasProperty("signing.secretKeyRingFile") ||
+            project.hasProperty("signing.gnupg.key")
 
-    if (hasSigningKey && (isRelease || project.hasProperty("signing.keyId"))) {
+    if (hasSigningKey && (isRelease || project.hasProperty("signing.keyId") || project.hasProperty("signingInMemoryKey"))) {
         signAllPublications()
     }
 
