@@ -70,7 +70,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.2"
+        version = "1.0.3"
     )
 
     publishToMavenCentral()

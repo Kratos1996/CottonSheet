@@ -46,7 +46,7 @@ Add the dependency to your `commonMain` source set in `build.gradle.kts`:
 ```kotlin
 sourceSets {
     commonMain.dependencies {
-        implementation("io.github.kratos1996:cottonsheet:1.0.2")
+        implementation("io.github.kratos1996:cottonsheet:1.0.3")
     }
 }
 ```

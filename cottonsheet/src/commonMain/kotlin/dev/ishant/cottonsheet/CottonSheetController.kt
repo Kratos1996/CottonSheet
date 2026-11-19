@@ -3,6 +3,7 @@ package dev.ishant.cottonsheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 // add new comment
 // ─────────────────────────────────────────────────────────────────────────────
 // Internal model — one entry per CottonSheet layer in the stack
@@ -133,8 +134,14 @@ class CottonSheetController {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CompositionLocal
+// CompositionLocal & Factory
 // ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Creates and remembers a [CottonSheetController].
+ */
+@Composable
+fun rememberCottonSheetController(): CottonSheetController = remember { CottonSheetController() }
 
 /**
  * Provides [CottonSheetController] to the composition tree.

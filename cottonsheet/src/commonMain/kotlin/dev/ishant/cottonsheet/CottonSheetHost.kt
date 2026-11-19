@@ -90,10 +90,10 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CottonSheetHost(content: @Composable () -> Unit) {
-
-    val controller = remember { CottonSheetController() }
-
+fun CottonSheetHost(
+    controller: CottonSheetController = rememberCottonSheetController(),
+    content: @Composable () -> Unit
+) {
     CompositionLocalProvider(LocalCottonSheetController provides controller) {
 
         // ── App content ───────────────────────────────────────────────────────
