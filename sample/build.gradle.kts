@@ -14,7 +14,11 @@ kotlin {
         }
     }
     
-    jvm("desktop")
+    jvm("desktop") {
+        mainRun {
+            mainClass.set("MainKt")
+        }
+    }
 
     listOf(
         iosArm64(),
@@ -38,6 +42,17 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
         }
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+            }
+        }
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
     }
 }
 

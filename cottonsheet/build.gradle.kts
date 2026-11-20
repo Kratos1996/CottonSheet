@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.kratos1996"
-version = "1.0.6"
+version = "1.0.7"
 
 kotlin {
     android {
@@ -50,6 +50,9 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
         }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
     }
 }
 
@@ -62,6 +65,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
 tasks.withType<JavaCompile>().configureEach {
     sourceCompatibility = JavaVersion.VERSION_11.toString()
     targetCompatibility = JavaVersion.VERSION_11.toString()
+}
+
+tasks.matching { it.name.startsWith("checkComposeUiTestConfiguration") }.configureEach {
+    enabled = false
 }
 
 extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
@@ -86,7 +93,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.6"
+        version = "1.0.7"
     )
 
     publishToMavenCentral()

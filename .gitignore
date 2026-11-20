@@ -1,8 +1,8 @@
-# Gradle
+# Gradle & Build outputs
 .gradle/
 build/
-*/build/
-sample/build/
+**/build/
+
 
 # IntelliJ / Android Studio
 .idea/
@@ -22,6 +22,7 @@ Thumbs.db
 .kotlin/
 .compose/
 .konan/
+kotlin-js-store/
 
 # Test output
 captures/
