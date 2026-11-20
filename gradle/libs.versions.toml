@@ -1,13 +1,14 @@
 [versions]
-kotlin = "2.4.0"
-agp = "9.4.1"
-composeMultiplatform = "1.7.3"
+kotlin = "2.4.21"
+agp = "9.5.1"
+composeMultiplatform = "1.12.2"
+composeMaterial3 = "1.9.0"
 vanniktechPublish = "0.37.0"
-dokka = "2.2.0"
-androidx-activityCompose = "1.9.3"
+dokka = "2.3.0"
+androidx-activityCompose = "1.13.0"
 
 [libraries]
-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMultiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }

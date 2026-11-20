@@ -26,7 +26,6 @@ kotlin {
         }
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
     jvm("desktop") {
@@ -85,7 +84,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.4"
+        version = "1.0.5"
     )
 
     publishToMavenCentral()
