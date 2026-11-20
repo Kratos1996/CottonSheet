@@ -46,7 +46,7 @@ Add the dependency to your `commonMain` source set in `build.gradle.kts`:
 ```kotlin
 sourceSets {
     commonMain.dependencies {
-        implementation("io.github.kratos1996:cottonsheet:1.0.3")
+        implementation("io.github.kratos1996:cottonsheet:1.0.4")
     }
 }
 ```
@@ -121,7 +121,11 @@ cottonSheet.show { dismiss1 ->
 | `isFullScreen` | `Boolean` | `false` | If true, the sheet fills the entire screen height. |
 | `isDismissable` | `Boolean` | `true` | Whether tapping outside or back press closes the sheet. |
 | `showDragHandle` | `Boolean` | `true` | Whether to show the default M3 drag handle. |
+| `dragHandleColor` | `Color` | `Gray (0.4 alpha)` | Color of the default drag handle knob. |
+| `dragHandleWidth` | `Dp` | `32.dp` | Width of the default drag handle knob. |
+| `dragHandleHeight` | `Dp` | `4.dp` | Height of the default drag handle knob. |
 | `customDragHandle` | `Composable?` | `null` | A custom Composable to replace the default handle. |
+| `onDismissed` | `(() -> Unit)?` | `null` | Callback invoked when the sheet finishes dismissing completely. |
 | `sheetMaxWidth` | `Dp` | `640.dp` | Maximum width (useful for tablets/desktop). |
 | `containerColor` | `Color?` | `null` | Background color of the sheet. |
 | `shape` | `Shape?` | `null` | Corner shape of the sheet. |

@@ -154,7 +154,13 @@ fun CottonSheetHost(
                     scrimColor = p.scrimColor ?: BottomSheetDefaults.ScrimColor,
                     dragHandle = when {
                         p.customDragHandle != null -> p.customDragHandle
-                        p.showDragHandle           -> ({ BottomSheetDefaults.DragHandle() })
+                        p.showDragHandle           -> ({
+                            BottomSheetDefaults.DragHandle(
+                                width = p.dragHandleWidth,
+                                height = p.dragHandleHeight,
+                                color = p.dragHandleColor,
+                            )
+                        })
                         else                       -> null
                     },
                 ) {

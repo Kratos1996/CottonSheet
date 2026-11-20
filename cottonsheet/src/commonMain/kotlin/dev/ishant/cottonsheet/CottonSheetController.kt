@@ -13,7 +13,16 @@ internal data class CottonSheetEntry(
     val id: Long,
     val params: CottonSheetParams,
     val content: @Composable (dismiss: () -> Unit) -> Unit,
-)
+) {
+    private var isDismissed = false
+
+    fun notifyDismissed() {
+        if (!isDismissed) {
+            isDismissed = true
+            params.onDismissed?.invoke()
+        }
+    }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CottonSheetController
@@ -112,14 +121,19 @@ class CottonSheetController {
      * Does nothing when the stack is empty.
      */
     fun dismiss() {
-        if (stack.isNotEmpty()) stack.removeAt(stack.lastIndex)
+        if (stack.isNotEmpty()) {
+            val entry = stack.removeAt(stack.lastIndex)
+            entry.notifyDismissed()
+        }
     }
 
     /**
      * Dismiss **all** CottonSheets in the stack simultaneously.
      */
     fun dismissAll() {
+        val old = stack.toList()
         stack.clear()
+        old.forEach { it.notifyDismissed() }
     }
 
     // ── Internal ──────────────────────────────────────────────────────────────
@@ -129,7 +143,9 @@ class CottonSheetController {
      * Called by [CottonSheetHost] after the hide animation completes.
      */
     internal fun dismissById(id: Long) {
+        val entry = stack.find { it.id == id }
         stack.removeAll { it.id == id }
+        entry?.notifyDismissed()
     }
 }
 

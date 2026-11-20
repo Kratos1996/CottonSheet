@@ -29,7 +29,11 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    jvm()
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
     js { browser() }
 
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
@@ -46,6 +50,17 @@ kotlin {
             implementation(compose.components.resources)
         }
     }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
 }
 
 extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
@@ -70,7 +85,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.3"
+        version = "1.0.4"
     )
 
     publishToMavenCentral()
