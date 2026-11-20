@@ -8,6 +8,9 @@ plugins {
     id("signing")
 }
 
+group = "io.github.kratos1996"
+version = "1.0.6"
+
 kotlin {
     android {
         namespace = "dev.ishant.cottonsheet"
@@ -46,7 +49,6 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
-            implementation(compose.components.resources)
         }
     }
 }
@@ -84,7 +86,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.5"
+        version = "1.0.6"
     )
 
     publishToMavenCentral()
