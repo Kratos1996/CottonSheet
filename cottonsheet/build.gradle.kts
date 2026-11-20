@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.vanniktechPublish)
@@ -12,23 +12,14 @@ group = "io.github.kratos1996"
 version = "1.0.7"
 
 kotlin {
-    android {
-        namespace = "dev.ishant.cottonsheet"
-        compileSdk = 37
-        minSdk = 24
-
-        optimization {
-            consumerKeepRules.apply {
-                publish = true
-                file("consumer-rules.pro")
-            }
-        }
-
+    androidTarget {
+        publishLibraryVariants("release")
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
         }
     }
 
+    iosX64()
     iosArm64()
     iosSimulatorArm64()
     jvm("desktop") {
@@ -50,9 +41,21 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
         }
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-        }
+    }
+}
+
+android {
+    namespace = "dev.ishant.cottonsheet"
+    compileSdk = 37
+
+    defaultConfig {
+        minSdk = 24
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -65,10 +68,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
 tasks.withType<JavaCompile>().configureEach {
     sourceCompatibility = JavaVersion.VERSION_11.toString()
     targetCompatibility = JavaVersion.VERSION_11.toString()
-}
-
-tasks.matching { it.name.startsWith("checkComposeUiTestConfiguration") }.configureEach {
-    enabled = false
 }
 
 extensions.configure<org.gradle.plugins.signing.SigningExtension>("signing") {
