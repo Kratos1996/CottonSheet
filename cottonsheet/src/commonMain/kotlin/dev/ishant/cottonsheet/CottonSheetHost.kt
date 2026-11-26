@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
@@ -166,9 +165,10 @@ fun CottonSheetHost(
                         }
                     },
                     sheetState = sheetState,
-                    properties = ModalBottomSheetProperties(
-                        shouldDismissOnBackPress = p.isDismissable,
-                    ),
+                    // No explicit ModalBottomSheetProperties: its constructors differ across
+                    // material3 versions (NoSuchMethodError at runtime). Back press and
+                    // outside taps still go through onDismissRequest, which already checks
+                    // p.isDismissable, so non-dismissable sheets stay open.
                     sheetMaxWidth = if (p.sheetWidth != null) Dp.Unspecified else p.sheetMaxWidth,
                     shape = if (p.isDragHandleOutside) RectangleShape else (p.shape ?: BottomSheetDefaults.ExpandedShape),
                     containerColor = if (p.isDragHandleOutside) Color.Transparent else (p.containerColor ?: BottomSheetDefaults.ContainerColor),

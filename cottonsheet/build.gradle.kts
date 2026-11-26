@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.kratos1996"
-version = "1.0.7"
+version = "1.0.8"
 
 kotlin {
     androidTarget {
@@ -92,7 +92,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.kratos1996",
         artifactId = "cottonsheet",
-        version = "1.0.7"
+        version = "1.0.8"
     )
 
     publishToMavenCentral()
