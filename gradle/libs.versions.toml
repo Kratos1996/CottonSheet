@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.4.21"
-agp = "9.5.1"
-composeMultiplatform = "1.9.0"
+agp = "9.5.3"
+composeMultiplatform = "1.12.2"
 composeMaterial3 = "1.9.0"
 vanniktechPublish = "0.37.0"
 dokka = "2.3.0"

@@ -19,3 +19,15 @@ allprojects {
         extra.set(key.toString(), value)
     }
 }
+
+afterEvaluate {
+    listOf("js", "wasm").forEach { target ->
+        val packageLock = layout.buildDirectory.file("$target/package-lock.json").get().asFile
+        if (!packageLock.exists()) {
+            packageLock.parentFile.mkdirs()
+            packageLock.writeText("{}")
+        }
+    }
+}
+
+

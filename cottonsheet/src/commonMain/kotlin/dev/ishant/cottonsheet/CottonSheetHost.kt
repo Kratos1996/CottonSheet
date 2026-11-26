@@ -165,10 +165,6 @@ fun CottonSheetHost(
                         }
                     },
                     sheetState = sheetState,
-                    // No explicit ModalBottomSheetProperties: its constructors differ across
-                    // material3 versions (NoSuchMethodError at runtime). Back press and
-                    // outside taps still go through onDismissRequest, which already checks
-                    // p.isDismissable, so non-dismissable sheets stay open.
                     sheetMaxWidth = if (p.sheetWidth != null) Dp.Unspecified else p.sheetMaxWidth,
                     shape = if (p.isDragHandleOutside) RectangleShape else (p.shape ?: BottomSheetDefaults.ExpandedShape),
                     containerColor = if (p.isDragHandleOutside) Color.Transparent else (p.containerColor ?: BottomSheetDefaults.ContainerColor),
